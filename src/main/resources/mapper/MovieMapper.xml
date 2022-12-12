@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ujiuye.dao.MovieMapper">
+
+    <resultMap type="com.ujiuye.domain.Movie" id="movieMap">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="director" column="director"/>
+        <result property="time_length" column="time_length"/>
+        <result property="pub_date" column="pub_date"/>
+        <result property="description" column="description"/>
+        <result property="rating" column="rating"/>
+        <result property="pic" column="pic"/>
+        <collection property="categories" ofType="com.ujiuye.domain.Category">
+            <id property="id" column="cid"/>
+            <result property="catname" column="catname"/>
+        </collection>
+        <collection property="actors" ofType="com.ujiuye.domain.Actor">
+            <id property="id" column="aid"/>
+            <result property="name" column="aname"/>
+            <result property="birthday" column="abirthday"/>
+            <result property="sex" column="asex"/>
+            <result property="description" column="adescription"/>
+            <result property="pic" column="apic"/>
+        </collection>
+    </resultMap>
+
+
+<!--    <select id="findAll" resultMap="movieMap">-->
+<!--        select m.*,-->
+<!--               a.id aid,a.name aname,a.birthday abirthday,a.sex asex,a.description adescription, a.pic apic,-->
+<!--               c.id cid, c.catname catname-->
+<!--        from movie m-->
+<!--            inner join movie_actor ma-->
+<!--                on m.id=ma.movieid-->
+<!--            inner join actor a-->
+<!--                on ma.actorid=a.id-->
+<!--            inner join movie_category mc-->
+<!--                on m.id=mc.movieid-->
+<!--            inner join category c-->
+<!--                on mc.categoryid=c.id-->
+<!--    </select>-->
+
+    <select id="findAll" resultMap="movieMap">
+        select m.*,
+               a.id aid,a.name aname,a.birthday abirthday,a.sex asex,a.description adescription, a.pic apic,
+               c.id cid, c.catname catname
+        from movie m, movie_actor ma, actor a, movie_category mc, category c
+        where
+              m.id=ma.movieid
+          and ma.actorid=a.id
+          and m.id=mc.movieid
+          and mc.categoryid=c.id
+    </select>
+</mapper>
